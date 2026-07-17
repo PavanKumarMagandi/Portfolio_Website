@@ -140,6 +140,25 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // --- Showcase collapse / expand toggles ---
+  const showcaseToggles = document.querySelectorAll(".showcase-toggle");
+  showcaseToggles.forEach((btn) => {
+    const targetId = btn.getAttribute("aria-controls");
+    const target = document.getElementById(targetId);
+    const label = btn.querySelector(".showcase-toggle-label");
+    if (!target || !label) return;
+
+    btn.addEventListener("click", () => {
+      const isExpanded = btn.getAttribute("aria-expanded") === "true";
+      const nextExpanded = !isExpanded;
+      btn.setAttribute("aria-expanded", String(nextExpanded));
+      target.classList.toggle("is-collapsed", !nextExpanded);
+      label.textContent = nextExpanded
+        ? "Hide dashboard screenshots"
+        : "Show dashboard screenshots";
+    });
+  });
+
   // --- Dashboard screenshot lightbox ---
   const galleryButtons = Array.from(document.querySelectorAll(".showcase-frame"));
   const lightbox = document.getElementById("lightbox");
