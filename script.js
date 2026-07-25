@@ -118,6 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ".skill-group",           // toolkit skill cards
       ".timeline-item",         // experience / education timeline cards
       ".cert-card",             // certification cards
+      ".contact-inner",         // contact card (whole box)
       ".contact-chip-ring",     // contact photo
       ".nav-mark img"           // nav logo image
     ].join(", ");
