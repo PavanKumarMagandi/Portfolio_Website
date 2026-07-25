@@ -1665,6 +1665,14 @@ background: rgba(255,255,255,0.12);
   box-shadow: 0 22px 40px rgba(0, 0, 0, 0.3);
 }
 
+.pill.tilt-3d.is-tilting,
+.badge-flagship.tilt-3d.is-tilting,
+.eyebrow.tilt-3d.is-tilting,
+.nav-mark img.tilt-3d.is-tilting,
+.showcase-tag.tilt-3d.is-tilting {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.28);
+}
+
 @media (hover: none) {
   .tilt-3d { transform: none !important; }
 }

@@ -95,30 +95,66 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // --- 3D hover tilt for badges, photo, KPI strip, and about boxes ---
-  const tiltEls = document.querySelectorAll(".tilt-3d");
+  // --- 3D hover tilt for every box / card / image across the site ---
   const supportsHover = window.matchMedia("(hover: hover)").matches;
 
-  if (tiltEls.length && supportsHover) {
-    const MAX_TILT = 10; // degrees
-    const MAX_LIFT = 1.035; // scale
+  if (supportsHover) {
+    const TILT_SELECTOR = [
+      ".tilt-3d",              // explicitly marked elements
+      ".eyebrow",               // badge chips (hero + section heads + contact)
+      ".hero-photo-ring",       // profile photo
+      ".kpi-strip",             // KPI highlight strip
+      ".quick-item",            // about "quick facts" pills
+      ".capability-point",      // about capability cards
+      ".capability-major",      // about summary card
+      ".fact",                  // project stat facts
+      ".pill",                  // every skill / meta pill chip
+      ".badge-flagship",        // "FLAGSHIP PROJECT" ribbon
+      ".bq-block",              // business question / insight / decision block
+      // ".project" intentionally excluded — tilting the full project
+      // card made the body text hard to read; inner elements
+      // (images, pills, facts, badges) still tilt individually.
+      ".showcase-frame",        // dashboard screenshot thumbnails (images)
+      ".skill-group",           // toolkit skill cards
+      ".timeline-item",         // experience / education timeline cards
+      ".cert-card",             // certification cards
+      ".contact-chip-ring",     // contact photo
+      ".nav-mark img"           // nav logo image
+    ].join(", ");
+
+    const tiltEls = Array.from(document.querySelectorAll(TILT_SELECTOR));
+    tiltEls.forEach((el) => el.classList.add("tilt-3d"));
+
+    const BASE_TILT = 12; // degrees, for small elements
+    const MIN_TILT = 3;   // degrees, for very large elements
+    const REFERENCE_SIZE = 220; // px
 
     tiltEls.forEach((el) => {
-      el.addEventListener("mouseenter", () => {
+      el.addEventListener("mouseenter", (e) => {
+        e.stopPropagation();
         el.classList.add("is-tilting");
       });
 
       el.addEventListener("mousemove", (e) => {
+        e.stopPropagation();
         const rect = el.getBoundingClientRect();
         const px = (e.clientX - rect.left) / rect.width - 0.5;
         const py = (e.clientY - rect.top) / rect.height - 0.5;
-        const rotateY = px * MAX_TILT * 2;
-        const rotateX = -py * MAX_TILT * 2;
+
+        // Scale tilt intensity down for larger boxes so big cards
+        // don't swing wildly, while small chips/images stay lively.
+        const size = Math.max(rect.width, rect.height);
+        const maxTilt = Math.min(BASE_TILT, Math.max(MIN_TILT, (REFERENCE_SIZE / size) * BASE_TILT));
+        const lift = 1 + Math.min(0.035, (maxTilt / BASE_TILT) * 0.035);
+
+        const rotateY = px * maxTilt * 2;
+        const rotateX = -py * maxTilt * 2;
         el.style.transform =
-          `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(${MAX_LIFT}, ${MAX_LIFT}, ${MAX_LIFT})`;
+          `perspective(900px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(${lift.toFixed(3)}, ${lift.toFixed(3)}, ${lift.toFixed(3)})`;
       });
 
-      el.addEventListener("mouseleave", () => {
+      el.addEventListener("mouseleave", (e) => {
+        e.stopPropagation();
         el.classList.remove("is-tilting");
         el.style.transform = "";
       });
