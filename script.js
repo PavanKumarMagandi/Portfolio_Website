@@ -95,6 +95,36 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // --- 3D hover tilt for badges, photo, KPI strip, and about boxes ---
+  const tiltEls = document.querySelectorAll(".tilt-3d");
+  const supportsHover = window.matchMedia("(hover: hover)").matches;
+
+  if (tiltEls.length && supportsHover) {
+    const MAX_TILT = 10; // degrees
+    const MAX_LIFT = 1.035; // scale
+
+    tiltEls.forEach((el) => {
+      el.addEventListener("mouseenter", () => {
+        el.classList.add("is-tilting");
+      });
+
+      el.addEventListener("mousemove", (e) => {
+        const rect = el.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width - 0.5;
+        const py = (e.clientY - rect.top) / rect.height - 0.5;
+        const rotateY = px * MAX_TILT * 2;
+        const rotateX = -py * MAX_TILT * 2;
+        el.style.transform =
+          `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(${MAX_LIFT}, ${MAX_LIFT}, ${MAX_LIFT})`;
+      });
+
+      el.addEventListener("mouseleave", () => {
+        el.classList.remove("is-tilting");
+        el.style.transform = "";
+      });
+    });
+  }
+
   // --- Active nav link on scroll ---
   const navAnchorLinks = Array.from(document.querySelectorAll(".nav-links a"));
   const sectionsForNav = navAnchorLinks

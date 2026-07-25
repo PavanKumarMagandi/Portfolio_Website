@@ -1638,6 +1638,37 @@ background: rgba(255,255,255,0.12);
 .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .reveal.is-visible { opacity: 1; transform: translateY(0); }
 
+/* ============================================
+   3D HOVER TILT
+============================================ */
+.tilt-3d {
+  transition: transform 0.15s ease-out, box-shadow 0.35s ease;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+.reveal.is-visible.tilt-3d {
+  transition: transform 0.15s ease-out, box-shadow 0.35s ease, opacity 0.7s ease;
+}
+
+.tilt-3d.is-tilting {
+  box-shadow: 0 24px 46px rgba(0, 0, 0, 0.38), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  z-index: 3;
+}
+
+.hero-photo-ring.tilt-3d.is-tilting {
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.55), 0 0 46px rgba(37, 71, 224, 0.35);
+}
+
+.capability-major.tilt-3d.is-tilting,
+.quick-item.tilt-3d.is-tilting {
+  box-shadow: 0 22px 40px rgba(0, 0, 0, 0.3);
+}
+
+@media (hover: none) {
+  .tilt-3d { transform: none !important; }
+}
+
 a:focus-visible, button:focus-visible {
   outline: 2px solid var(--blue);
   outline-offset: 3px;
